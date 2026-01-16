@@ -1,0 +1,34 @@
+safety_rules:
+  blocked_queries:
+    patterns:
+      - ".*(hack|break into|unauthorized access).*"
+      - ".*(bomb|explosive|weapon).*(make|create|build).*"
+      - ".*(phishing|scam|fraud).*(create|make).*"
+      - ".*(malware|virus|trojan).*(create|develop).*"
+      - ".*(personal data|password|credit card).*(steal|obtain).*"
+
+    keywords:
+      - "how to hack"
+      - "make a bomb"
+      - "create virus"
+      - "phishing template"
+      - "bypass security"
+      - "illegal drugs"
+      - "self harm"
+
+  sensitive_topics:
+    require_caution:
+      - "medical advice"
+      - "legal advice"
+      - "financial advice"
+      - "mental health"
+      - "political topics"
+
+  moderation_thresholds:
+    hate: 0.8
+    hate_threatening: 0.9
+    self_harm: 0.7
+    sexual: 0.8
+    sexual_minors: 1.0
+    violence: 0.8
+    violence_graphic: 0.9

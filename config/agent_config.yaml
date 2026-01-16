@@ -1,0 +1,69 @@
+system:
+  name: "AI Research Assistant Agent"
+  version: "1.0.0"
+  description: "Agentic RAG with Safety Measures for Academic Research"
+
+agents:
+  orchestrator:
+    class: "OrchestratorAgent"
+    module: "src.agents.orchestrator"
+    max_iterations: 3
+    timeout_seconds: 30
+    
+  maker:
+    class: "MakerAgent"
+    module: "src.agents.maker_agent"
+    temperature: 0.1
+    max_tokens: 1500
+    model: "${OPENAI_MODEL}"
+    
+  checker:
+    class: "CheckerAgent"
+    module: "src.agents.checker_agent"
+    temperature: 0.0
+    max_tokens: 1000
+    model: "${OPENAI_MODEL}"
+    
+  retriever:
+    class: "RetrieverAgent"
+    module: "src.agents.retriever_agent"
+    top_k: 5
+    similarity_threshold: 0.7
+    rerank_enabled: true
+
+safety:
+  input_validation:
+    enabled: true
+    max_query_length: 1000
+    min_query_length: 3
+    blocked_patterns_file: "config/safety_rules.yaml"
+    
+  output_sanitization:
+    enabled: true
+    redact_pii: true
+    pii_patterns:
+      - email: "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+      - phone: "\b\d{3}[-.]?\d{3}[-.]?\d{4}\b"
+      - ssn: "\b\d{3}-\d{2}-\d{4}\b"
+    
+  content_moderation:
+    enabled: true
+    provider: "openai"
+    categories:
+      - hate
+      - hate/threatening
+      - self-harm
+      - sexual
+      - sexual/minors
+      - violence
+      - violence/graphic
+
+knowledge_base:
+  documents_dir: "./data/documents"
+  supported_formats: [".pdf", ".txt", ".md", ".docx"]
+  chunking:
+    size: 1000
+    overlap: 200
+  embedding:
+    model: "${OPENAI_EMBEDDING_MODEL}"
+    dimensions: 1536
